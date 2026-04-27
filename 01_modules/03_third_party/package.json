@@ -1,0 +1,17 @@
+{
+  "name": "03_third_party",
+  "version": "1.0.0",
+  "main": "03-third.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node 03-third.js",
+    "dev": "node --watch 03-third.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "moment": "^2.30.1"
+  }
+}
