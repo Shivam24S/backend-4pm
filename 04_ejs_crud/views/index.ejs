@@ -25,7 +25,11 @@
 
       <% studentList.forEach((s)=>{%> 
         
-        <li> <%= s.name%> </li>
+        <li> <%= s.name%>
+        <a href="/edit/<%=s.id%>">edit</a>
+        <a href="/delete/<%=s.id%>">delete</a> 
+      </li>
+     
     
         <%})%>
 

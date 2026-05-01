@@ -38,6 +38,50 @@ app.post("/add", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/edit/:id", (req, res) => {
+  const id = req.params.id;
+
+  const student = studentList.find((s) => s.id === Number(id));
+
+  console.log("student data", student);
+
+  if (!student) {
+    return res.json({ message: "student not found" });
+  }
+
+  res.render("edit", { student });
+});
+
+app.post("/edit/:id", (req, res) => {
+  const id = req.params.id;
+
+  const student = studentList.find((s) => s.id === Number(id));
+
+  if (!student) {
+    return res.json({ message: "student not found" });
+  }
+
+  const { name } = req.body;
+
+  student.name = name;
+
+  res.redirect("/");
+});
+
+app.get("/delete/:id", (req, res) => {
+  const id = req.params.id;
+
+  const student = studentList.find((s) => s.id === Number(id));
+
+  if (!student) {
+    return res.json({ message: "student not found" });
+  }
+
+  studentList = studentList.filter((s) => s.id !== student.id);
+
+  res.redirect("/");
+});
+
 const port = 5000;
 
 app.listen(port, (err) => {
