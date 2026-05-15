@@ -97,7 +97,7 @@ app.patch("/updateTask/:id", (req, res, next) => {
   });
 });
 
-// PUT Method
+// PUT Method whole data will be updated if not provide then it will remove or marked as null
 
 app.put("/updateTask/:id", (req, res, next) => {
   const id = Number(req.params.id);
@@ -128,22 +128,23 @@ app.put("/updateTask/:id", (req, res, next) => {
   });
 });
 
+// delete
 
-app.delete("/task/:id",(req,res,next)=>{
-
+app.delete("/task/:id", (req, res, next) => {
   const id = Number(req.params.id);
 
-  const index = taskList.findIndex((t)=>t.id === id);
-  
-  if(index === -1){
-    return next(new HttpError("task not found with this id",404))
+  const index = taskList.findIndex((t) => t.id === id);
+
+  if (index === -1) {
+    return next(new HttpError("task not found with this id", 404));
   }
 
-  taskList.splice(index,1);
+  taskList.splice(index, 1);
 
-  res.status(200).json({success:true,message:"task data deleted successfully"})
-
-})
+  res
+    .status(200)
+    .json({ success: true, message: "task data deleted successfully" });
+});
 
 app.use((req, res, next) => {
   return next(new HttpError("requested route not found", 404));
