@@ -28,9 +28,11 @@ const studentSchema = new mongoose.Schema({
   },
   mobileNumber: {
     type: Number,
-    min: 10,
+    minLength:10,
     required: true,
   },
 });
 
 const Student = mongoose.model("studentData", studentSchema);
+
+export default Student;
