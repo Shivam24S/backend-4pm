@@ -27,8 +27,8 @@ const studentSchema = new mongoose.Schema({
     default: "active",
   },
   mobileNumber: {
-    type: Number,
-    minLength:10,
+    type: String,
+    minlength:10,
     required: true,
   },
 });
