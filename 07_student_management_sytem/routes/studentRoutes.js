@@ -8,10 +8,16 @@ router.post("/add", studentControllers.add);
 
 router.get("/getAllStudents", studentControllers.getAllStudentData);
 
+router.delete("/deleteAll", studentControllers.deleteAllData);
+
 router.get("/:id", studentControllers.getStudentById);
 
 router.delete("/:id", studentControllers.deleteStudent);
 
-router.patch("/:id",studentControllers.updateStudent)
+// router.patch("/:id",studentControllers.updateStudent)
+
+router.patch("/:id", studentControllers.updateDataManually);
+
+
 
 export default router;
