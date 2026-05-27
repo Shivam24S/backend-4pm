@@ -20,7 +20,7 @@ const create = async (req, res, next) => {
       return next(new HttpError("event date is required", 400));
     }
 
-    const newEvent = await new Event({
+    const newEventData = await Event.create({
       eventName,
       eventDate,
       eventDescription,
@@ -32,15 +32,15 @@ const create = async (req, res, next) => {
       eventSpeakers,
       eventDocuments,
     });
-
-    await newEvent.save();
-
+    
     res.status(201).json({
       success: true,
       message: "new event added successfully",
-      newEvent,
+      data: newEventData,
     });
-  } catch (error) {}
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
 };
 
 export default { create };
