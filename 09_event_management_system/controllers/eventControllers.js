@@ -7,12 +7,14 @@ const create = async (req, res, next) => {
     const { eventName, eventDate, eventDescription, eventVenue, ticketPrice } =
       req.body;
 
-    const eventImages = req.files?.req.files.map((file) => file.path) || null;
-    const eventPoster = req.files?.req.files[0].path || null;
-    const eventBanners = req.files?.req.files[0].path || null;
-    const eventSpeakers = req.files?.req.files.map((file) => file.path) || null;
+    const eventImages =
+      req.files?.eventImages?.map((file) => file.path) || null;
+    const eventPoster = req.files?.eventPoster[0]?.path || null;
+    const eventBanners = req.files?.eventBanners[0]?.path || null;
+    const eventSpeakers =
+      req.files?.eventSpeakers?.map((file) => file.path) || null;
     const eventDocuments =
-      req.files?.req.files.map((file) => file.path) || null;
+      req.files?.eventDocuments?.map((file) => file.path) || null;
 
     if (!eventDate) {
       return next(new HttpError("event date is required", 400));
@@ -33,13 +35,11 @@ const create = async (req, res, next) => {
 
     await newEvent.save();
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "new event added successfully",
-        newEvent,
-      });
+    res.status(201).json({
+      success: true,
+      message: "new event added successfully",
+      newEvent,
+    });
   } catch (error) {}
 };
 

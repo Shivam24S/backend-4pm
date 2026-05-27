@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
 
     if (file.fieldname === "eventImages") {
       folderName += "eventImages";
-    } else if (file.filename === "eventPoster") {
+    } else if (file.fieldname === "eventPoster") {
       folderName += "eventPoster";
     } else if (file.fieldname === "eventBanners") {
       folderName += "eventBanners";
