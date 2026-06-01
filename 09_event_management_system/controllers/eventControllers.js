@@ -89,7 +89,7 @@ const deleteEvent = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const deleteEvent = await Event.findById(id);
+    const deleteEvent = await Event.findByIdAndDelete(id);
     if (!deleteEvent) {
       return next(new HttpError("failed to delete event", 400));
     }
@@ -110,12 +110,67 @@ const deleteEvent = async (req, res, next) => {
       }
     });
 
-    const eventDelete = await Event.findByIdAndDelete(id);
-
     return res.status(200).json({ success: true, message: "event deleted" });
   } catch (error) {
     return next(new HttpError(error.message, 500));
   }
 };
 
-export default { create, getAllEvents, eventById, deleteEvent };
+const updateEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const event = await Event.findById(id);
+
+    console.log("update event", event);
+
+    if (!event) {
+      return next(new HttpError("no event data found with this id", 404));
+    }
+
+    const updates = Object.keys(req.body);
+
+    const allowedFields = [
+      "eventName",
+      "eventDate",
+      "eventDescription",
+      "eventVenue",
+      "ticketPrice",
+    ];
+
+    const isValidUpdates = updates.every((field) =>
+      allowedFields.includes(field),
+    );
+
+    if (!isValidUpdates) {
+      return next(new HttpError("only allowed field can be updated", 400));
+    }
+
+    if (req.files?.eventImages) {
+      event.eventImages.forEach((file) => {
+        if (fs.existsSync(file)) {
+          fs.unlinkSync(file);
+        }
+      });
+
+      event.eventImages =
+        req.files?.eventImages?.map((file) => file.path) || null;
+    }
+
+    updates.forEach((update) => {
+      event[update] = req.body[update];
+    });
+
+    await event.save();
+
+    res.status(200).json({
+      success: true,
+      message: "event data updated successfully",
+      event,
+    });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+};
+
+export default { create, getAllEvents, eventById, deleteEvent, updateEvent };

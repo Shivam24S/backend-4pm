@@ -30,7 +30,28 @@ router.get("/allEvents", eventControllers.getAllEvents);
 
 router.get("/:id", eventControllers.eventById);
 
-router.delete("/:id",eventControllers.deleteEvent)
+router.delete("/:id", eventControllers.deleteEvent);
+
+router.patch(
+  "/:id",
+  uploads.fields([
+    { name: "eventImages", maxCount: 5 },
+    { name: "eventPoster", maxCount: 1 },
+    {
+      name: "eventBanners",
+      maxCount: 1,
+    },
+    {
+      name: "eventSpeakers",
+      maxCount: 3,
+    },
+    {
+      name: "eventDocuments",
+      maxCount: 3,
+    },
+  ]),
+  eventControllers.updateEvent,
+);
 
 export default router;
 
