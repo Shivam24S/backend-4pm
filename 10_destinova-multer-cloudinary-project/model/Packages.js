@@ -20,14 +20,18 @@ const packageSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    duration: {
+      type: Number,
+      required: true,
+    },
     destination: {
       type: String,
       required: true,
       trim: true,
     },
-    packageImages: {
+    packageImage: {
       type: String,
-      required: true,
+      // required: true,
     },
     packageType: {
       type: String,

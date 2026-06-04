@@ -6,9 +6,13 @@ dotenv.config({ path: "./.env" });
 import HttpError from "./middlewares/HttpError.js";
 import connectDB from "./config/db.js";
 
+import packageRouter from "./routes/packageRoutes.js";
+
 const app = express();
 
 app.use(express.json());
+
+app.use("/package", packageRouter);
 
 app.get("/", (req, res) => {
   res.json({ message: "hello from server" });
