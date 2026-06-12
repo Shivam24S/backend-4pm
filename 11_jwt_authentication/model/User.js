@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,6 +26,14 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true
+        }
+      }
+    ]
   },
   {
     timestamps: true,
@@ -47,7 +56,7 @@ userSchema.statics.findByCredential = async function (email, password) {
       throw new Error("unable to login");
     }
 
-    const isMatched = await bcrypt.compare(password,user.password);
+    const isMatched = await bcrypt.compare(password, user.password);
 
     if (!isMatched) {
       throw new Error("unable to login");
@@ -57,6 +66,37 @@ userSchema.statics.findByCredential = async function (email, password) {
   } catch (error) {
     throw new Error(error.message);
   }
+};
+
+
+userSchema.methods.generateAuthToken = async function () {
+
+  try {
+
+    const user = this;
+
+
+    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+    console.log("token", token);
+
+    if (!token) {
+      throw new Error("failed to generate auth token")
+    }
+
+    user.tokens = user.tokens.concat({ token })
+
+
+
+    await user.save();
+
+
+  } catch (error) {
+    throw new Error(error.message)
+
+  }
+
+
 };
 
 const User = mongoose.model("user", userSchema);
