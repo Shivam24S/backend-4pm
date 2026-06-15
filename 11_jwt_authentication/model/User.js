@@ -30,10 +30,10 @@ const userSchema = new mongoose.Schema(
       {
         token: {
           type: String,
-          required: true
-        }
-      }
-    ]
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
@@ -68,36 +68,34 @@ userSchema.statics.findByCredential = async function (email, password) {
   }
 };
 
-
 userSchema.methods.generateAuthToken = async function () {
-
   try {
-
     const user = this;
 
-
-    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign(
+      { _id: user._id.toString() },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" },
+    );
 
     console.log("token", token);
 
     if (!token) {
-      throw new Error("failed to generate auth token")
+      throw new Error("failed to generate auth token");
     }
 
-    user.tokens = user.tokens.concat({ token })
-
-
+    user.tokens = user.tokens.concat({ token });
 
     await user.save();
-
-
   } catch (error) {
-    throw new Error(error.message)
-
+    throw new Error(error.message);
   }
-
-
 };
+
+
+
+
+
 
 const User = mongoose.model("user", userSchema);
 
