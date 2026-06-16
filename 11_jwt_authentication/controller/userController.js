@@ -69,4 +69,85 @@ const authLogin = async (req, res, next) => {
     .json({ success: true, message: "auth login successfully", user });
 };
 
-export default { add, getAllUser, login,authLogin };
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    await User.deleteOne(user);
+
+    res
+      .status(200)
+      .json({ success: true, message: "user deleted successfully" });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+};
+
+const updateUser = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    const updates = Object.keys(req.body);
+
+    const allowedField = ["name", "password"];
+
+    const isValidUpdates = updates.every((field) =>
+      allowedField.includes(field),
+    );
+
+    if (!isValidUpdates) {
+      return next(new HttpError("only allowed field can be update", 400));
+    }
+
+    updates.forEach((update) => {
+      user[update] = req.body[update];
+    });
+
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "user data updated successfully", user });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+};
+
+const logOut = async (req, res, next) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((t) => t.token != req.token);
+
+    await req.user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "user log out successfully" });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+};
+
+const logOutAll = async (req, res, next) => {
+  try {
+    req.user.tokens = [];
+
+    await req.user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "user logOut from all device" });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+};
+
+export default {
+  add,
+  getAllUser,
+  login,
+  authLogin,
+  deleteUser,
+  updateUser,
+  logOut,
+  logOutAll
+};
