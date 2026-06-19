@@ -48,7 +48,7 @@ const login = async (req, res, next) => {
 
     const token = await user.generateAuthToken();
 
-    console.log("token", token);
+    console.log("token1111", token);
 
     res.status(200).json({
       success: true,

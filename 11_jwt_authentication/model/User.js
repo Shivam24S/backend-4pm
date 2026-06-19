@@ -86,14 +86,37 @@ userSchema.methods.generateAuthToken = async function () {
 
     user.tokens = user.tokens.concat({ token });
 
+
     await user.save();
+
+    return token;
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
 
+userSchema.methods.toJSON = function () {
 
+
+  const user = this;
+
+  console.log("user", user)
+
+  const userObject = user.toObject();
+
+
+  console.log("userObject", userObject)
+
+  delete userObject.password;
+
+  delete userObject.tokens;
+
+  delete userObject.__v
+
+  return userObject
+
+}
 
 
 
