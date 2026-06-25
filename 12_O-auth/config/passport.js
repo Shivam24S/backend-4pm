@@ -1,39 +1,83 @@
+// import passport from "passport";
+
+// import passportGoogle from "passport-google-oauth20";
+
+// import User from "../model/User.js";
+
+// import dotenv from "dotenv";
+
+// dotenv.config({ path: "./.env" });
+
+// const googleStrategy = passportGoogle.Strategy;
+
+// passport.use(
+//     new googleStrategy(
+//         {
+//             clientID: process.env.CLIENT_ID,
+//             clientSecret: process.env.CLIENT_SECRET,
+//             callbackURL: "http://127.0.0.1:5000/auth/google/redirect",
+//         },
+
+//         async function (accessToken, refreshToken, profile, done) {
+//             const alreadyUser = await User.findOne({ googleId: profile.id });
+
+//             console.log("profile", profile)
+
+//             if (!alreadyUser) {
+//                 const newUser = await User.create({
+//                     googleId: profile.id,
+//                     name: profile.displayName,
+//                     email: profile.emails[0]?.value,
+//                 });
+
+//                 return done(null, newUser);
+//             }
+
+//             return done(null, alreadyUser);
+//         },
+//     ),
+// );
+
+// export default passport
+
 import passport from "passport";
-
-import passportGoogle from "passport-google-oauth20";
-
-import User from "../model/User.js";
+import googlePassport from "passport-google-oauth20";
 
 import dotenv from "dotenv";
 
+import User from "../model/User.js";
+
 dotenv.config({ path: "./.env" });
 
-const googleStrategy = passportGoogle.Strategy;
+const googleStrategy = googlePassport.Strategy;
 
 passport.use(
     new googleStrategy(
         {
             clientID: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
-            callbackURL: "/google/redirect",
+            callbackURL: process.env.CALLBACK_URL,
         },
-
         async function (accessToken, refreshToken, profile, done) {
-            const alreadyUser = await User.findOne({ googleId: profile.id });
+            try {
+                const alreadyUser = await User.findOne({ googleId: profile.id });
 
-            console.log("profile", profile)
+                console.log("profile", profile)
 
-            if (!alreadyUser) {
-                const newUser = await User.create({
-                    googleId: profile.id,
-                    name: profile.displayName,
-                    email: profile.emails[0]?.value,
-                });
+                if (!alreadyUser) {
+                    const newUser = await User.create({
+                        googleId: profile.id,
+                        name: profile.displayName,
+                        email: profile.emails[0]?.value,
+                    });
 
-                return done(null, newUser);
+                    done(null, newUser);
+                }
+
+                done(null, alreadyUser);
+            } catch (error) {
+                console.log(error.message);
             }
-
-            return done(null, alreadyUser);
         },
     ),
 );

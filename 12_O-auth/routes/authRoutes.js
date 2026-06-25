@@ -7,8 +7,18 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.get("/google/login", passport.authenticate("google", {
-  scope: [["profile"], ["email"]]
-}))
+// router.get("/google/login", passport.authenticate("google", {
+//   scope: [["profile"], ["email"]]
+// }))
+
+
+
+router.get("/google/login", passport.authenticate("google", { scope: [["email"], ["profile"]] }))
+
+
+router.get("/google/redirect", passport.authenticate("google", { failureRedirect: "/" }),(req, res) => {
+
+  res.send("this is callback url")
+})
 
 export default router;
