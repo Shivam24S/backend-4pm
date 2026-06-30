@@ -5,6 +5,7 @@ import HttpError from "./middleware/HttpError.js";
 import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/authRoutes.js"
+import profileRoutes from "./routes/profileRoutes.js"
 import passport from "./config/passport.js";
 
 
@@ -36,11 +37,13 @@ app.use(express.json());
 
 app.use("/auth", authRoutes)
 
+app.use("/profile", profileRoutes)
+
 
 
 
 app.get("/", (req, res) => {
-    res.render("home")
+    res.render("home",{user:req.user})
 });
 
 app.use((req, res, next) => {
