@@ -11,7 +11,18 @@ dotenv.config({ path: "./.env" })
 import HttpError from "./middleware/HttpError.js";
 import connectDB from "./config/db.js";
 
+// routes
+
+import userRoutes from "./routes/user.routes.js";
+
 const app = express();
+
+app.use(express.json());
+
+
+// routes
+
+app.use("/user", userRoutes)
 
 // server check
 app.get("/", (req, res, next) => {
