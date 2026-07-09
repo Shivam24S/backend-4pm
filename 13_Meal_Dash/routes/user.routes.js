@@ -7,6 +7,9 @@ import userController from "../controller/user.controller.js";
 import validate from "../middleware/validate.js";
 import registerSchema from "../validation/register.schema.js";
 
+// middleware
+import auth from "../middleware/Auth.js";
+
 const router = express.Router();
 
 
@@ -15,5 +18,7 @@ const router = express.Router();
 router.post("/add", validate(registerSchema), userController.add);
 
 router.post("/login", userController.login);
+
+router.post("/authLogin", auth, userController.authLogin)
 
 export default router;
