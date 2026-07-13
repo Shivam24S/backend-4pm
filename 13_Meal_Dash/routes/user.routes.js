@@ -21,4 +21,12 @@ router.post("/login", userController.login);
 
 router.post("/authLogin", auth, userController.authLogin)
 
+router.post("/logOut", auth, userController.logOut)
+
+router.post("/logOutAll", auth, userController.logOutAll);
+
+router.delete("/delete", auth, userController.deleteUser)
+
+
+
 export default router;
