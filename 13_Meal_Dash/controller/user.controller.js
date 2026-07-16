@@ -13,7 +13,11 @@ const add = async (req, res, next) => {
       role,
       address,
       phone,
+      profilePic: req.file ? req.file.path : null,
+      cloudinary_id: req.file ? req.file.fileName : null
     };
+
+
 
     const alreadyUser = await User.findOne({ email });
 
@@ -145,7 +149,7 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-const getAllUser = async function (req,res,next) {
+const getAllUser = async function (req, res, next) {
   try {
     const users = await User.find();
 

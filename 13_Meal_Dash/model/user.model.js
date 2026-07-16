@@ -40,6 +40,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    profilePic: {
+      type: String,
+
+    },
+    cloudinary_id: {
+      type: String,
+    },
     tokens: [
       {
         token: {
@@ -109,6 +116,29 @@ userSchema.methods.generateAuthToken = async function () {
     console.log(error.message);
   }
 };
+
+
+userSchema.methods.toJSON = function() {
+
+  const user = this;
+
+  const userObject = user.toObject();
+
+  delete userObject.password
+
+  delete userObject._id
+
+  delete userObject.tokens
+
+  delete userObject.createdAt
+
+  delete userObject.updatedAt
+
+  delete userObject.__v
+
+  return userObject
+
+}
 
 const User = mongoose.model("user", userSchema);
 

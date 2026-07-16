@@ -10,13 +10,14 @@ import registerSchema from "../validation/register.schema.js";
 // middleware
 import auth from "../middleware/Auth.js";
 import checkRole from "../middleware/checkRole.js";
+import upload from "../middleware/uploads.js";
 
 const router = express.Router();
 
 
 // routes 
 
-router.post("/add", validate(registerSchema), userController.add);
+router.post("/add",upload.single("profilePic"), validate(registerSchema), userController.add);
 
 router.post("/login", userController.login);
 
