@@ -5,7 +5,7 @@ import userController from "../controller/user.controller.js";
 
 // validation
 import validate from "../middleware/validate.js";
-import registerSchema from "../validation/register.schema.js";
+import { registerSchema, updateUserSchema } from "../validation/user.schema.js";
 
 // middleware
 import auth from "../middleware/Auth.js";
@@ -14,26 +14,33 @@ import upload from "../middleware/uploads.js";
 
 const router = express.Router();
 
+// routes
 
-// routes 
-
-router.post("/add",upload.single("profilePic"), validate(registerSchema), userController.add);
+router.post(
+  "/add",
+  upload.single("profilePic"),
+  validate(registerSchema),
+  userController.add,
+);
 
 router.post("/login", userController.login);
 
-router.post("/authLogin", auth, userController.authLogin)
+router.post("/authLogin", auth, userController.authLogin);
 
-router.post("/logOut", auth, userController.logOut)
+router.post("/logOut", auth, userController.logOut);
 
 router.post("/logOutAll", auth, userController.logOutAll);
 
-router.delete("/delete", auth, userController.deleteUser)
+router.delete("/delete", auth, userController.deleteUser);
 
-router.patch("/update", auth, userController.updateUser);
-
+router.patch(
+  "/update",
+  auth,
+  upload.single("profilePic"),
+  validate(updateUserSchema),
+  userController.updateUser,
+);
 
 router.get("/allUsers", auth, checkRole("admin"), userController.getAllUser);
-
-
 
 export default router;
