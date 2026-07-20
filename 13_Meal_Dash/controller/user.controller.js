@@ -108,7 +108,20 @@ const logOutAll = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const user = req.user;
+    const targetUser = req.params.id || req.user._id;
+
+    const user = await User.findById(targetUser);
+
+    if (!user) {
+      return next(new HttpError("user not found", 404));
+    }
+
+    if (
+      req.user.role !== "admin" &&
+      req.user._id.toString() !== user._id.toString()
+    ) {
+      return next(new HttpError("access denied", 403));
+    }
 
     await user.deleteOne();
 
@@ -122,11 +135,24 @@ const deleteUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    const user = req.user;
+
+
+    const targetUser = req.params.id || req.user._id;
+    
+    
+    const user = await User.findById(targetUser)
+
+    if(!targetUser){
+      return next(new HttpError("user not found",404))
+    }
 
     const updates = Object.keys(req.body);
 
-    const allowedFields = ["name", "address", "phone", "password"];
+    let allowedFields = ["name", "address", "phone", "password"];
+
+    if(req.user.role === "admin"){
+      allowedFields = [...allowedFields,"isVerified"]
+    }
 
     const isValid = updates.every((field) => allowedFields.includes(field));
 

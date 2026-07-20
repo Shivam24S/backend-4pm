@@ -14,6 +14,7 @@ import connectDB from "./config/db.js";
 // routes
 
 import userRoutes from "./routes/user.routes.js";
+import adminRoutes from "./routes/admin.routes.js"
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(express.json());
 // routes
 
 app.use("/user", userRoutes)
+app.use("/admin", adminRoutes)
 
 // server check
 app.get("/", (req, res, next) => {
