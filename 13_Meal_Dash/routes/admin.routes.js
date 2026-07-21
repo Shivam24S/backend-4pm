@@ -3,6 +3,9 @@ import express from "express";
 import auth from "../middleware/Auth.js";
 import checkRole from "../middleware/checkRole.js";
 import userController from "../controller/user.controller.js";
+import upload from "../middleware/uploads.js"
+import validate from "../middleware/validate.js"
+import {updateUserSchema} from "../validation/user.schema.js"
 
 const router = express.Router();
 
