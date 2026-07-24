@@ -42,7 +42,6 @@ const userSchema = new mongoose.Schema(
     },
     profilePic: {
       type: String,
-
     },
     cloudinary_id: {
       type: String,
@@ -59,6 +58,8 @@ const userSchema = new mongoose.Schema(
 
   {
     timestamps: true,
+    // toJSON: { virtuals: true },
+    // toObject: { virtuals: true },
   },
 );
 
@@ -110,35 +111,37 @@ userSchema.methods.generateAuthToken = async function () {
     await user.save();
 
     return token;
-
-
   } catch (error) {
     console.log(error.message);
   }
 };
 
+userSchema.virtual("restaurant", {
+  ref: "restaurant",
+  localField: "_id",
+  foreignField: "owner",
+});
 
-userSchema.methods.toJSON = function() {
 
+userSchema.methods.toJSON = function () {
   const user = this;
 
   const userObject = user.toObject();
 
-  delete userObject.password
+  delete userObject.password;
 
-  delete userObject._id
+  delete userObject._id;
 
-  delete userObject.tokens
+  delete userObject.tokens;
 
-  delete userObject.createdAt
+  delete userObject.createdAt;
 
-  delete userObject.updatedAt
+  delete userObject.updatedAt;
 
-  delete userObject.__v
+  delete userObject.__v;
 
-  return userObject
-
-}
+  return userObject;
+};
 
 const User = mongoose.model("user", userSchema);
 

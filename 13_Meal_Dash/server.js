@@ -94,4 +94,19 @@ async function checkRestaurant() {
   }
 }
 
-checkRestaurant();
+// checkRestaurant();
+
+async function virtualRestaurant() {
+  try {
+    const owner = await User.findById("6a54cd53dbf93c657e5a78ec").populate("restaurant","restaurantName address -_id");
+
+    // console.log("restaurant owner", owner);
+
+    console.log("restaurant", owner.restaurant);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+virtualRestaurant()
