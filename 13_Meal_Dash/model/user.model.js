@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -58,8 +59,8 @@ const userSchema = new mongoose.Schema(
 
   {
     timestamps: true,
-    // toJSON: { virtuals: true },
-    // toObject: { virtuals: true },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
 
@@ -116,11 +117,11 @@ userSchema.methods.generateAuthToken = async function () {
   }
 };
 
-userSchema.virtual("restaurant", {
-  ref: "restaurant",
-  localField: "_id",
-  foreignField: "owner",
-});
+userSchema.virtual("restaurant",{
+  ref:"restaurant",
+  localField:"_id",
+  foreignField:"owner"
+})
 
 
 userSchema.methods.toJSON = function () {

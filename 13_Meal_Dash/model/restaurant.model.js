@@ -44,11 +44,12 @@ const restaurantSchema = new mongoose.Schema(
     cloudinary_id: {
       type: String,
     },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
+    owner:{
+      type:mongoose.Schema.Types.ObjectId,
       ref:"user",
-      required: true,
-    },
+      required:true,
+    }
+ 
   },
   {
     timestamps: true,

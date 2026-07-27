@@ -75,34 +75,72 @@ startServer();
 
 // relationship concept
 
-async function checkRestaurant() {
+// async function checkRestaurant() {
+//   try {
+//     const restaurant = await restaurantModel
+//       .findById("6a5f57f1a697f4d89b317a94")
+//       .populate("owner", "name email phone -_id");
+
+//     // console.log("restaurant", restaurant);
+
+//     console.log("restaurant", restaurant.owner);
+
+//     // using manually
+//     // const owner = await User.findById(restaurant.owner)
+
+//     // console.log("owner", owner)
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+// // checkRestaurant();
+
+// async function virtualRestaurant() {
+//   try {
+//     const owner = await User.findById("6a54cd53dbf93c657e5a78ec").populate("restaurant","restaurantName address -_id");
+
+//     // console.log("restaurant owner", owner);
+
+//     console.log("restaurant", owner.restaurant);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+// virtualRestaurant()
+
+// relationship concept again
+
+async function checkOwner() {
   try {
     const restaurant = await restaurantModel
       .findById("6a5f57f1a697f4d89b317a94")
-      .populate("owner", "name email phone -_id");
+      .populate("owner", "name email");
 
     // console.log("restaurant", restaurant);
 
-    console.log("restaurant", restaurant.owner);
+    console.log("owner", restaurant.owner);
 
-    // using manually
-    // const owner = await User.findById(restaurant.owner)
+    // user model using manually method
 
-    // console.log("owner", owner)
+    // const owner = await User.findById(restaurant.owner);
+
+    //    console.log("owner",owner)
   } catch (error) {
     console.log(error);
   }
 }
 
-// checkRestaurant();
+// checkOwner()
 
 async function virtualRestaurant() {
   try {
-    const owner = await User.findById("6a54cd53dbf93c657e5a78ec").populate("restaurant","restaurantName address -_id");
+    const user = await User.findById("6a54cd53dbf93c657e5a78ec").populate("restaurant");
 
-    // console.log("restaurant owner", owner);
+    // console.log("user", user);
 
-    console.log("restaurant", owner.restaurant);
+    console.log("restaurant", user.restaurant)
   } catch (error) {
     console.log(error);
   }
