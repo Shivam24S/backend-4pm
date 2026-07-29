@@ -147,4 +147,4 @@ async function virtualRestaurant() {
 }
 
 
-virtualRestaurant()
+// virtualRestaurant()

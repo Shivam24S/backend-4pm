@@ -16,4 +16,6 @@ router.post(
     restaurantController.add,
 );
 
+router.get("/allRestaurant",auth,restaurantController.getAllRestaurant)
+
 export default router;
