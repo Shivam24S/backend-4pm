@@ -96,8 +96,8 @@ const getAllRestaurant = async (req, res, next) => {
       success: true,
       message: "restaurants founds",
       totalRestaurant: totalRestaurant,
-      totalPages: Math.ceil(totalRestaurant / page),
-      page: page,
+      totalPages: Math.ceil(totalRestaurant / limit),
+      CurrentPage: page,
       restaurants,
     });
   } catch (error) {
