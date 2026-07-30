@@ -43,7 +43,7 @@ const add = async (req, res, next) => {
 
 const getAllRestaurant = async (req, res, next) => {
   try {
-    const {
+    let {
       page = 1,
       limit = 10,
       isOpen,
@@ -53,9 +53,9 @@ const getAllRestaurant = async (req, res, next) => {
       order = "desc",
     } = req.query;
 
-    // page = number(page);
+    page = Number(page);
 
-    // limit = number(limit);
+    limit = Number(limit);
 
     const filter = {};
 
@@ -74,16 +74,18 @@ const getAllRestaurant = async (req, res, next) => {
       filter.isOpen = isOpen === "true";
     }
 
-    // const sortOption = () => {
-    //   [sort] = "asc" ? 1 : -1;
-    // };
+    const sortOption  = {
+      [sort] : order === "asc" ? 1 : -1
+    };
 
     const totalRestaurant = await restaurantModel.countDocuments(filter);
 
     const restaurants = await restaurantModel
       .find(filter)
       .populate("owner", "name email address -_id")
+      .sort(sortOption)
       .skip((page - 1) * limit)
+      .limit(limit)
       .lean();
 
     if (restaurants.length === 0) {
@@ -94,6 +96,7 @@ const getAllRestaurant = async (req, res, next) => {
       success: true,
       message: "restaurants founds",
       totalRestaurant: totalRestaurant,
+      totalPages: Math.ceil(totalRestaurant / page),
       page: page,
       restaurants,
     });
