@@ -1,4 +1,3 @@
-import { required } from "joi";
 import mongoose from "mongoose";
 
 const providerSchema = new mongoose.Schema(
@@ -17,14 +16,18 @@ const providerSchema = new mongoose.Schema(
       },
     ],
 
-    documents: {
-      type: String,
-      required: true,
-    },
-    cloudinary_id: {
-      type: String,
-      required: true,
-    },
+    documents: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    cloudinary_id: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     bankAccNumber: {
       type: String,
       required: true,
@@ -42,6 +45,6 @@ const providerSchema = new mongoose.Schema(
   },
 );
 
-const provider = mongoose.model("provider", providerSchema);
+const Provider = mongoose.model("provider", providerSchema);
 
-export default provider;
+export default Provider;

@@ -10,7 +10,7 @@ import { registerSchema, updateUserSchema } from "../validation/user.schema.js";
 // middleware
 import auth from "../middleware/Auth.js";
 import checkRole from "../middleware/checkRole.js";
-import upload from "../middleware/uploads.js";
+import {profilePic} from "../middleware/uploads.js";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const router = express.Router();
 
 router.post(
   "/add",
-  upload.single("profilePic"),
+  profilePic.single("profilePic"),
   validate(registerSchema),
   userController.add,
 );
@@ -36,7 +36,7 @@ router.delete("/delete", auth, userController.deleteUser);
 router.patch(
   "/update",
   auth,
-  upload.single("profilePic"),
+  // upload.single("profilePic"),
   validate(updateUserSchema),
   userController.updateUser,
 );

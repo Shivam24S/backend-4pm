@@ -14,6 +14,9 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import restaurantRoutes from "./routes/restaurant.routes.js";
+import providerRoutes from "./routes/provider.routes.js"
+
+
 import restaurantModel from "./model/restaurant.model.js";
 import User from "./model/user.model.js";
 
@@ -26,6 +29,7 @@ app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/restaurant", restaurantRoutes);
+app.use("/provider",providerRoutes)
 
 // server check
 app.get("/", (req, res, next) => {
