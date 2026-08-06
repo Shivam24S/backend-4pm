@@ -30,19 +30,22 @@ const createUploads = ({
   const storage = new CloudinaryStorage({
     cloudinary,
     params: async (req, file) => {
-      (folder, transformation, allowed_formats, resource_type);
+      return {
+        folder,
+        transformation,
+        allowed_formats,
+        resource_type,
+      };
     },
   });
 
   return multer({
     storage,
-    fileSize: { fileSize },
+    limits: { fileSize },
     fileFilter: (req, file, cb) => {
-      if (mimetype.length && !file.mimetype.includes(file.mimetype)) {
-        cb(
-          new Error(
-            `invalid file type, upload ${file.mimetype} only files `,
-          ),
+      if (mimetype.length && !mimetype.includes(file.mimetype)) {
+      return  cb(
+          new Error(`invalid file type, Allowed types: ${mimetype.join(", ")} `),
           false,
         );
       } else {
@@ -59,6 +62,6 @@ export const profilePic = createUploads({
     { fetch_format: "webp" },
     { quality: "auto" },
   ],
-   allowed_formats: ["jpeg", "jpg", "png", "webp"],
-   mimetype:["image/jpeg","image/png","image/jpg"]
+  allowed_formats: ["jpeg", "jpg", "png", "webp"],
+  mimetype: ["image/jpeg", "image/png", "image/jpg"],
 });
