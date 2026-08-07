@@ -9,13 +9,13 @@ const registerAsProvider = async (req, res, next) => {
 
     const user = await User.findById(userId);
 
-    const existingProvider = await Provider.find({ ownerName: userId });
+    // const existingProvider = await Provider.find({ ownerName: userId });
 
-    if (existingProvider) {
-      return next(
-        new HttpError("this account is already registered as provider", 400),
-      );
-    }
+    // if (existingProvider) {
+    //   return next(
+    //     new HttpError("this account is already registered as provider", 400),
+    //   );
+    // }
 
     const { restaurants, bankAccNumber } = req.body;
 

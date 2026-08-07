@@ -11,7 +11,7 @@ const providerSchema = new mongoose.Schema(
     restaurants: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        // required: true,
         ref: "restaurant",
       },
     ],

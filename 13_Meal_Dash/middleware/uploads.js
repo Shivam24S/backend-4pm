@@ -24,8 +24,8 @@ const createUploads = ({
   transformation = [],
   resource_type = "auto",
   fileSize = 1024 * 1024 * 5,
-  allowed_formats = [],
-  mimetype = [],
+  allowedFormats= [],
+  mimeTypes = [],
 }) => {
   const storage = new CloudinaryStorage({
     cloudinary,
@@ -33,7 +33,7 @@ const createUploads = ({
       return {
         folder,
         transformation,
-        allowed_formats,
+        allowedFormats,
         resource_type,
       };
     },
@@ -43,9 +43,11 @@ const createUploads = ({
     storage,
     limits: { fileSize },
     fileFilter: (req, file, cb) => {
-      if (mimetype.length && !mimetype.includes(file.mimetype)) {
-      return  cb(
-          new Error(`invalid file type, Allowed types: ${mimetype.join(", ")} `),
+      if (mimeTypes.length && !mimeTypes.includes(file.mimetype)) {
+        return cb(
+          new Error(
+            `invalid file type, Allowed types: ${mimeTypes.join(", ")} `,
+          ),
           false,
         );
       } else {
@@ -62,6 +64,12 @@ export const profilePic = createUploads({
     { fetch_format: "webp" },
     { quality: "auto" },
   ],
-  allowed_formats: ["jpeg", "jpg", "png", "webp"],
-  mimetype: ["image/jpeg", "image/png", "image/jpg"],
+  allowedFormats: ["jpeg", "jpg", "png", "webp"],
+  mimeTypes: ["image/jpeg", "image/png", "image/jpg"],
+});
+
+export const documents = createUploads({
+  folder: "mealDash/Documents",
+  allowedFormats: ["pdf"],
+  mimeTypes: ["application/pdf"],
 });
