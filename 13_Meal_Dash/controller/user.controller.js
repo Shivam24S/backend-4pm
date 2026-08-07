@@ -2,6 +2,9 @@ import User from "../model/user.model.js";
 
 import HttpError from "../middleware/HttpError.js";
 import cloudinary from "../config/cloudinary.js";
+import sendEmail from "../utils/sendEmail.js";
+
+import welcomeEmailTemplate from "../templates/welcomeTemplates.js";
 
 const add = async (req, res, next) => {
   try {
@@ -29,6 +32,14 @@ const add = async (req, res, next) => {
     const user = new User(newUser);
 
     await user.save();
+
+    sendEmail({
+      to: user.email,
+      subject: "welcome to mealDash",
+      html: welcomeEmailTemplate(user.name),
+    });
+
+    
 
     res.status(201).json({ success: true, message: "new user added", user });
   } catch (error) {
@@ -135,23 +146,20 @@ const deleteUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-
-
     const targetUser = req.params.id || req.user._id;
-    
-    
-    const user = await User.findById(targetUser)
 
-    if(!targetUser){
-      return next(new HttpError("user not found",404))
+    const user = await User.findById(targetUser);
+
+    if (!targetUser) {
+      return next(new HttpError("user not found", 404));
     }
 
     const updates = Object.keys(req.body);
 
     let allowedFields = ["name", "address", "phone", "password"];
 
-    if(req.user.role === "admin"){
-      allowedFields = [...allowedFields,"isVerified"]
+    if (req.user.role === "admin") {
+      allowedFields = [...allowedFields, "isVerified"];
     }
 
     const isValid = updates.every((field) => allowedFields.includes(field));
