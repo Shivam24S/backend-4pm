@@ -160,7 +160,10 @@ const updateUser = async (req, res, next) => {
 
     if (req.user.role === "admin") {
       allowedFields = [...allowedFields, "isVerified"];
+      
     }
+
+    console.log("allowed fields",allowedFields)
 
     const isValid = updates.every((field) => allowedFields.includes(field));
 
