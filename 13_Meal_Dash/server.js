@@ -15,6 +15,7 @@ import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import restaurantRoutes from "./routes/restaurant.routes.js";
 import providerRoutes from "./routes/provider.routes.js"
+import foodRoutes from "./routes/food.routes.js"
 
 
 import restaurantModel from "./model/restaurant.model.js";
@@ -30,6 +31,7 @@ app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/restaurant", restaurantRoutes);
 app.use("/provider",providerRoutes)
+app.use("/food",foodRoutes)
 
 // server check
 app.get("/", (req, res, next) => {
