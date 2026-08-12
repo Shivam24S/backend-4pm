@@ -16,6 +16,9 @@ const add = async (req, res, next) => {
       isOpen,
     } = req.body;
 
+
+  
+
     const newRestaurant = await restaurantModel.create({
       restaurantName,
       description,
@@ -56,6 +59,8 @@ const getAllRestaurant = async (req, res, next) => {
     page = Number(page);
 
     limit = Number(limit);
+
+      console.log("city",city)
 
     const filter = {};
 

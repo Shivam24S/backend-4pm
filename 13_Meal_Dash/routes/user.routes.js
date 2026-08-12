@@ -11,6 +11,7 @@ import { registerSchema, updateUserSchema } from "../validation/user.schema.js";
 import auth from "../middleware/Auth.js";
 import checkRole from "../middleware/checkRole.js";
 import {profilePic} from "../middleware/uploads.js";
+import { authLimiter } from "../middleware/rateLimit.js";
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.post(
   userController.add,
 );
 
-router.post("/login", userController.login);
+router.post("/login",authLimiter, userController.login);
 
 router.post("/authLogin", auth, userController.authLogin);
 

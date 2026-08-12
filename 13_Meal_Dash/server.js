@@ -1,6 +1,9 @@
 // third party or external module
 import express from "express";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import hpp from "hpp";
+import cors from "cors"
 
 // dotenv config
 dotenv.config({ path: "./.env" });
@@ -8,30 +11,43 @@ dotenv.config({ path: "./.env" });
 // local modules
 import HttpError from "./middleware/HttpError.js";
 import connectDB from "./config/db.js";
+import rateLimit from "./middleware/rateLimit.js";
 
 // routes
 
 import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import restaurantRoutes from "./routes/restaurant.routes.js";
-import providerRoutes from "./routes/provider.routes.js"
-import foodRoutes from "./routes/food.routes.js"
+import providerRoutes from "./routes/provider.routes.js";
+import foodRoutes from "./routes/food.routes.js";
 
 
 import restaurantModel from "./model/restaurant.model.js";
 import User from "./model/user.model.js";
 
 const app = express();
+app.use(helmet());
+
+
+app.use(hpp());
+
+app.use(cors())
 
 app.use(express.json());
+
+app.use(rateLimit);
+
+
+
+
 
 // routes
 
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/restaurant", restaurantRoutes);
-app.use("/provider",providerRoutes)
-app.use("/food",foodRoutes)
+app.use("/provider", providerRoutes);
+app.use("/food", foodRoutes);
 
 // server check
 app.get("/", (req, res, next) => {
@@ -142,15 +158,16 @@ async function checkOwner() {
 
 async function virtualRestaurant() {
   try {
-    const user = await User.findById("6a54cd53dbf93c657e5a78ec").populate("restaurant");
+    const user = await User.findById("6a54cd53dbf93c657e5a78ec").populate(
+      "restaurant",
+    );
 
     // console.log("user", user);
 
-    console.log("restaurant", user.restaurant)
+    console.log("restaurant", user.restaurant);
   } catch (error) {
     console.log(error);
   }
 }
-
 
 // virtualRestaurant()
