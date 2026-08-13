@@ -73,3 +73,14 @@ export const documents = createUploads({
   allowedFormats: ["pdf"],
   mimeTypes: ["application/pdf"],
 });
+
+export const foodImages = createUploads({
+  folder: "mealDash/foodImages",
+  transformation: [
+    { height: "800", width: "800", crop: "limit" },
+    { fetch_format: "webp" },
+    { quality: "auto" },
+  ],
+  allowedFormats: ["jpeg", "jpg", "png", "webp"],
+  mimeTypes: ["image/jpeg", "image/png", "image/jpg"],
+});
