@@ -1,48 +1,76 @@
-import Order from "../models/order.model.js";
-import Food from "../models/food.model.js";
+import food from "../model/food.model.js";
+import order from "../model/order.model.js";
 
-export const createOrder = async (req, res, next) => {
+import HttpError from "../middleware/HttpError.js";
+
+const placeOrder = async (req, res, next) => {
   try {
-    const { restaurant, items } = req.body;
+    const { address, items, restaurantName, phone } = req.body;
 
-    const customer = req.user.id;
+    const customerName = req.user._id;
 
     const foodIds = items.map((item) => item.food);
 
-    const foods = await Food.find({
+    console.log("food ids", foodIds);
+
+    const foods = await food.find({
       _id: { $in: foodIds },
     });
+
+    console.log("user selected food from db", foods);
 
     let totalAmount = 0;
 
     const orderItems = items.map((item) => {
-      const food = foods.find(
+      const foodFound = foods.find(
         (food) => food._id.toString() === item.food.toString(),
       );
 
-      const itemTotal = food.price * item.quantity;
+      console.log("food found", foodFound);
 
-      totalAmount += itemTotal;
+      const itemsTotal = foodFound.price * item.qty;
+
+      console.log("item total", itemsTotal);
+
+      totalAmount += itemsTotal;
 
       return {
-        food: food._id,
-        quantity: item.quantity,
+        food: foodFound._id,
+        qty: item.qty,
       };
     });
 
-    const order = await Order.create({
-      customer,
-      restaurant,
+    console.log("total amount", totalAmount);
+
+    const newOrder = await order.create({
+      address,
       items: orderItems,
+      restaurantName,
+      phone,
+      customerName,
       totalAmount,
     });
 
+    const orderPopulate = await newOrder.populate([
+      { path: "customerName", select: "name email phone" },
+      {
+        path: "items.food",
+        select: "name",
+      },
+      {
+        path: "restaurantName",
+        select: "restaurantName phone",
+      },
+    ]);
+
     res.status(201).json({
       success: true,
-      message: "Order created successfully",
-      order,
+      message: "order placed successfully",
+      order: orderPopulate,
     });
   } catch (error) {
-    next(error);
+    next(new HttpError(error.message, 500));
   }
 };
+
+export default { placeOrder };
