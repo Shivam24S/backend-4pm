@@ -32,4 +32,9 @@ router.patch(
 
 router.get("/allUsers", auth, checkRole("admin"), adminController.getAllUsers);
 
+
+// dashboard 
+
+router.get("/dashboard",auth,checkRole("admin"),adminController.dashBoardStatics)
+
 export default router;
