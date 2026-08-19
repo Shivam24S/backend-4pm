@@ -5,6 +5,7 @@ import cloudinary from "../config/cloudinary.js";
 import sendEmail from "../utils/sendEmail.js";
 
 import welcomeEmailTemplate from "../templates/welcomeTemplates.js";
+import auditLogger from "../middleware/auditLogger.js";
 
 const add = async (req, res, next) => {
   try {
@@ -39,8 +40,6 @@ const add = async (req, res, next) => {
       html: welcomeEmailTemplate(user.name),
     });
 
-    
-
     res.status(201).json({ success: true, message: "new user added", user });
   } catch (error) {
     return next(new HttpError(error.message, 500));
@@ -66,6 +65,15 @@ const login = async (req, res, next) => {
       message: "user logged in successfully",
       user,
       token,
+    });
+
+    await auditLogger({
+      action: "USER_LOGIN",
+      performedBy: user._id,
+      module: "user",
+      targetedId: user._id,
+      Ip: req.ip,
+      userAgent: req.get("user-agent"),
     });
   } catch (error) {
     return next(new HttpError(error.message, 500));
@@ -160,10 +168,9 @@ const updateUser = async (req, res, next) => {
 
     if (req.user.role === "admin") {
       allowedFields = [...allowedFields, "isVerified"];
-      
     }
 
-    console.log("allowed fields",allowedFields)
+    console.log("allowed fields", allowedFields);
 
     const isValid = updates.every((field) => allowedFields.includes(field));
 
