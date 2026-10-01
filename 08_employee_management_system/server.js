@@ -8,9 +8,13 @@ import employeeRoutes from "./routes/employeeRouter.js";
 
 import dotenv from "dotenv";
 
+import cors from "cors";
+
 const app = express();
 
 dotenv.config({ path: "./.env" });
+
+app.use(cors());
 
 app.use(express.json());
 
